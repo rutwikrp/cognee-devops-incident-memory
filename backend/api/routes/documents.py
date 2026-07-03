@@ -29,3 +29,22 @@ async def list_documents(
 ):
 
     return document_service.list_documents(project_id)
+
+@router.delete("/{document_id}")
+async def delete_document(
+    document_id: str,
+):
+
+    deleted = document_service.delete_document(
+        document_id
+    )
+
+    if not deleted:
+        raise HTTPException(
+            status_code=404,
+            detail="Document not found",
+        )
+
+    return {
+        "message": "Document deleted."
+    }
