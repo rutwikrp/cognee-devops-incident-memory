@@ -242,59 +242,361 @@ frontend/
 └── pages/
 ```
 
+# 🚀 Getting Started
+
+## Prerequisites
+
+Make sure you have the following installed:
+
+- Python 3.11+
+- Node.js 20+
+- PostgreSQL
+- Git
+- pip
+- npm (or pnpm/yarn)
+- Cognee API credentials
+- OpenAI API Key (or compatible LLM provider)
+
 ---
 
-# 🚀 Workflow
+# 📥 Clone the Repository
 
-## 1. Create Project
+```bash
+git clone https://github.com/<your-username>/engineering-memory-copilot.git
+
+cd engineering-memory-copilot
+```
+
+---
+
+# ⚙️ Backend Setup
+
+Navigate to the backend directory.
+
+```bash
+cd backend
+```
+
+## Create Virtual Environment
+
+Linux / macOS
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+Windows
+
+```powershell
+python -m venv .venv
+
+.venv\Scripts\activate
+```
+
+---
+
+## Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## Configure Environment Variables
+
+Create a `.env` file inside the backend directory.
+
+```env
+DATABASE_URL=postgresql://username:password@localhost:5432/memory_db
+
+OPENAI_API_KEY=your_openai_api_key
+
+COGNEE_API_KEY=your_cognee_api_key
+
+COGNEE_API_URL=https://api.cognee.ai
+```
+
+Modify the values according to your environment.
+
+---
+
+## Start PostgreSQL
+
+Make sure PostgreSQL is running and create the database.
+
+Example:
+
+```sql
+CREATE DATABASE memory_db;
+```
+
+---
+
+## Run Database Migrations
+
+If using SQLAlchemy/Alembic:
+
+```bash
+alembic upgrade head
+```
+
+If your project creates tables automatically, this step can be skipped.
+
+---
+
+## Start Backend
+
+```bash
+uvicorn main:app --reload
+```
+
+Backend will start on
+
+```
+http://localhost:8000
+```
+
+API documentation
+
+```
+http://localhost:8000/docs
+```
+
+---
+
+# 💻 Frontend Setup
+
+Open another terminal.
+
+```bash
+cd frontend
+```
+
+---
+
+## Install Dependencies
+
+```bash
+npm install
+```
+
+or
+
+```bash
+pnpm install
+```
+
+---
+
+## Configure Frontend Environment
+
+Create
+
+```
+frontend/.env.local
+```
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8000
+```
+
+---
+
+## Start Frontend
+
+```bash
+npm run dev
+```
+
+or
+
+```bash
+pnpm dev
+```
+
+Application will run at
+
+```
+http://localhost:3000
+```
+
+---
+
+# ▶️ Running the Application
+
+Start the services in this order:
+
+1. PostgreSQL
+2. Backend
+3. Frontend
+
+Open your browser:
+
+```
+http://localhost:3000
+```
+
+---
+
+# 🧪 Demo Workflow
+
+### 1. Create a Project
+
+Example:
 
 ```
 Payments Platform
 ```
 
-↓
+---
 
-## 2. Upload Documents
+### 2. Upload Documents
 
-```
-Architecture.pdf
+Upload engineering documents such as:
 
-Incident.pdf
+- Architecture.pdf
+- Runbook.pdf
+- Incident_Report.pdf
 
-Migration.pdf
-```
+---
 
-↓
+### 3. Wait for Processing
 
-## 3. Build Memory
+The backend will:
 
-Cognee extracts
+- Extract document text
+- Send content to Cognee
+- Build organizational memory
 
-- Concepts
-- Relationships
-- Knowledge
+---
 
-↓
+### 4. Explore Memory
 
-## 4. Ask Questions
+Navigate to the **Memory** tab to inspect the generated memories.
+
+---
+
+### 5. Ask Questions
+
+Examples:
 
 ```
 Why was Redis introduced?
+
+How does authentication work?
+
+Which service depends on Kafka?
+
+What caused Incident 42?
 ```
 
-↓
+---
 
-## 5. Retrieve Memory
+### 6. View AI Response
 
-Relevant memories are fetched.
-
-↓
-
-## 6. Generate Response
-
-LLM produces a context-aware answer.
+The assistant retrieves relevant memories and generates a context-aware response.
 
 ---
+
+# 🛠 Troubleshooting
+
+## Backend doesn't start
+
+Check:
+
+- Python version
+- Virtual environment activated
+- Dependencies installed
+- Environment variables configured
+
+---
+
+## Database connection failed
+
+Verify:
+
+- PostgreSQL is running
+- DATABASE_URL is correct
+- Database exists
+
+---
+
+## Frontend cannot connect to backend
+
+Ensure:
+
+```
+NEXT_PUBLIC_API_URL=http://localhost:8000
+```
+
+Backend should be running before starting the frontend.
+
+---
+
+## Cognee connection issues
+
+Verify:
+
+- COGNEE_API_KEY
+- API endpoint
+- Internet connectivity
+- API quota/permissions
+
+---
+
+# 🧹 Development Commands
+
+## Backend
+
+Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+Run server
+
+```bash
+uvicorn main:app --reload
+```
+
+Run tests
+
+```bash
+pytest
+```
+
+---
+
+## Frontend
+
+Install packages
+
+```bash
+npm install
+```
+
+Start development server
+
+```bash
+npm run dev
+```
+
+Build production version
+
+```bash
+npm run build
+```
+
+Lint project
+
+```bash
+npm run lint
+```
+---
+
 
 # 📡 API Endpoints
 
