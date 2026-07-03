@@ -2,9 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-
+import ChatPanel from "@/components/workspace/ChatPanel";
 import { getProject, Project } from "@/services/projectService";
 import DocumentPanel from "@/components/workspace/DocumentPanel";
+import MemoryPanel from "@/components/workspace/MemoryPanel";
+import ProjectHeader from "@/components/workspace/ProjectHeader";
+import { getMemoryStatus } from "@/services/memoryService";
 
 export default function ProjectWorkspace() {
 
@@ -13,14 +16,10 @@ export default function ProjectWorkspace() {
     const id = params.id as string;
 
     const [project, setProject] = useState<Project | null>(null);
+    const [refreshMemory, setRefreshMemory] = useState(0);
+    const [memoryStatus, setMemoryStatus] = useState("Loading...");
+    const [documentCount, setDocumentCount] = useState(0);
 
-    useEffect(() => {
-
-        if (id) {
-            loadProject();
-        }
-
-    }, [id]);
 
     async function loadProject() {
 
@@ -38,6 +37,35 @@ export default function ProjectWorkspace() {
 
     }
 
+    
+    async function loadMemory() {
+
+        try {
+
+            const memory = await getMemoryStatus(id);
+
+            setMemoryStatus(memory.status);
+
+            setDocumentCount(memory.documents);
+
+        } catch (error) {
+
+            console.error(error);
+
+        }
+
+    }
+    useEffect(() => {
+
+        if (!id) {
+            return;
+        }
+
+        loadProject();
+
+        loadMemory();
+
+    }, [id, refreshMemory]);
     if (!project) {
 
         return (
@@ -47,60 +75,38 @@ export default function ProjectWorkspace() {
         );
 
     }
-
     return (
 
         <div className="p-8">
 
-            <h1 className="text-4xl font-bold">
+            <ProjectHeader
 
-                {project.name}
+                name={project.name}
 
-            </h1>
+                description={project.description}
 
-            <p className="text-gray-500 mt-2">
+                documents={documentCount}
 
-                {project.description}
+                memoryStatus={memoryStatus}
 
-            </p>
+            />
 
             <div className="grid grid-cols-3 gap-6 mt-10">
 
                 <DocumentPanel
-    projectId={project.id}
-/>              
+                    projectId={project.id}
+                    onUploadSuccess={() =>
+                        setRefreshMemory((prev) => prev + 1)}
+                    />              
 
-                <div className="border rounded-lg p-6">
+                <ChatPanel
+                    projectId={project.id}
+                />
 
-                    <h2 className="text-xl font-semibold">
-
-                        Chat
-
-                    </h2>
-
-                    <p className="mt-4 text-gray-500">
-
-                        Start chatting with memory.
-
-                    </p>
-
-                </div>
-
-                <div className="border rounded-lg p-6">
-
-                    <h2 className="text-xl font-semibold">
-
-                        Memory
-
-                    </h2>
-
-                    <p className="mt-4 text-gray-500">
-
-                        Cognee memory status.
-
-                    </p>
-
-                </div>
+                <MemoryPanel
+                    projectId={project.id}
+                    refresh={refreshMemory}
+                />
 
             </div>
 
