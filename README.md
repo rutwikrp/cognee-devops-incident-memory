@@ -1,5 +1,6 @@
 # 🧠 Engineering Memory Copilot
 ### AI-powered Organizational Memory using Cognee
+<img width="1254" height="1254" alt="ChatGPT Image Jul 4, 2026, 04_48_54 PM" src="https://github.com/user-attachments/assets/30f4a49b-be8f-4497-bb63-4be27310cce1" />
 
 > Stop searching documents. Start talking to your organization's memory.
 
